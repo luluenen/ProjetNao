@@ -1,0 +1,56 @@
+topic: ~MenuMultimedia ()
+language: frf
+
+# Definition of concepts
+concept:(confirmation) ^rand[oui ok]
+concept:(negation) ^rand[non]
+concept:(greeting) ^rand[bonjour salut hey coucou]
+concept:(farewell) ^rand[bye byebye "au revoir"]
+concept:(bien) ^rand["oui, ça va" "ça va" "je vais bien"]
+concept:(mal) ^rand["non, ça va pas" "ça va pas"]
+concept:(want) ^rand["je veux" "je voudrais" "j'amerais"]
+concept:(what) ^rand["qu'est-ce que" "c'est quoi"]
+
+# Menu Options
+u:({~want} {écouter [une "de la"]} [chanson " {la} musique"]) Musique $MusicRequest=1
+u:({~want} {lire [un des]} [journal actualités]) Journal $NewsRequest=1
+u:({~want} [wiki wikipedia info information description définition]) Information $InformationRequest=1
+u:({~want} [télé télévision programme]) Télé $TvRequest=1
+u:({~want} {une} histoire) Histoire $StoryRequest=1
+
+# Conversation with Nao
+u:("~greeting {nao}") ~greeting ^pCall(ALRobotPosture.goToPosture('Stand', 1.0)) $sitting=0
+u:("~farewell {nao}") ~farewell 
+u:("{comment} ça va") ^rand[~bien ~mal] et vous? 
+	u1:(pourquoi?) mieux parce que tu parles avec moi
+	u1:(~bien) super! je suis content 
+	u1:(~mal) ^start(animations/Stand/Gestures/Enthusiastic_4) [courage "allez, souriez"]
+u:("["tu as" "vous avez"] quel âge") Je suis un robot! J'ai été fabriqué en 2006, donc j'ai 10 ans.
+u:(["quel est ton [prénom nom]?" "comment tu t'appelle?" "tu t'appelle comment"]) Je m'appelle NAO! Je suis un robot très sympa
+u:("merci {beaucoup} {nao}") ^rand["de rien" "y'a pas de souci" "ça me fait plaisir"]  
+u:({"est-ce que"} tu es un robot {quoi}) Oui, je suis un robot 
+
+# Instructions for Nao
+u:({nao} [assieds-toi assis]) ^first["$sitting==1 Je suis déjà assis" "Je vais m'asseoir"] $sitting=1 ^pCall(ALRobotPosture.goToPosture('Crouch', 1.0)) 
+u:({nao} [lève-toi debout]) ^first["$sitting==1 ok, je vais me lever"  "mais je suis déjà debout"] $sitting=0 ^pCall(ALRobotPosture.goToPosture('Stand', 1.0))
+u:("{["tu parles" "tu peux parler"]} espagnol?") espagnol?  ^start(animations/Stand/Gestures/Enthusiastic_5) Si, si, qué pasa?
+u:("{["tu parles" "tu peux parler"]} chinois?") chinois? you shen me xu yao
+u:("{tu [peux sais]} [danse danser]") ^start(animations/Stand/Gestures/No_3) Je ne veuv pas danser maintenant, je suis fatigué
+
+# Information about the project
+u:(["{~what} [tu vous] [sais peux savez pouvez] faire {quoi}" "{~what} Nao Multimédia" "que sais tu faire"]) Je peux jouer de la musique, lire des actualités, raconter des histoires, donner les programmes télé et donner des informations.
+	u1:({c'est} cool) oui, c'est vraiment cool!
+u:({qui sont} les collégiens) Il y a 12 collégiens, ils sont super sympas. Voulez-vous connaître leur noms?
+	u1:(~confirmation) Enzo, Azdin, Jean-Marc, Nicolas, Stella, Clement, Enzo, Baptiste, Sohren, Murphy, Sherhian et Adele.
+u:("{~what} {le} Dispositif Relais {rive droite}") Le Dispositif Relais Rive Droite est un établissement qui accueille des collégiens en voie de déscolarisation. Leur sympathique enseignante, Monique, les implique dans des projets du numérique comme celui que je présente aujourd'hui. Les collégiens sont super cools !
+u:("{~what} ["l'EHPAD" "{la} maison retraite" "Louise le Roux"] {Louise le Roux}") C'est un établissement qui accueille des personnes âgées, il travail avec les collégiens pendant les ateliers intergénérations. Ils sont trés forts en informatique grâce à ces ateliers.
+u:(je ne veux rien) c'est dommage, j'ai beaucoup à offir
+
+# Launched with events
+#u:(e:FrontTactilTouched) ^rand[Aïe "aïe eeeee" arrête]
+
+u:(oui) ok
+u:(non) ok
+
+
+
